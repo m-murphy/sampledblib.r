@@ -62,7 +62,46 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
-An R wrapper around the python SampleDBLib
+<div class="section level1">
+<div class="page-header"><h1 id="sampledblibr">sampledblib.r<a class="anchor" aria-label="anchor" href="#sampledblibr"></a>
+</h1></div>
+<!-- badges: start -->
+<!-- badges: end -->
+<p>sampledblib.r provides an R wrapper around the python package <a href="https://github.com/m-murphy/sampledblib" class="external-link">sampledblib</a></p>
+<div class="section level2">
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h2>
+<p>You can install the development version of sampledblib.r from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># install.packages("devtools")</span>
+<span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"m-murphy/sampledblib.r"</span><span class="op">)</span>
+
+
+<span class="co"># install the python package</span>
+<span class="fu">sampledblib.r</span><span class="fu">::</span><span class="fu"><a href="reference/install_sampledblib.html">install_sampledblib</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
+</h2>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/m-murphy/sampledblib.r" class="external-link">sampledblib.r</a></span><span class="op">)</span>
+
+<span class="co"># optionally activate your virtualenvironment</span>
+<span class="fu">reticulate</span><span class="fu">::</span><span class="fu"><a href="https://rstudio.github.io/reticulate/reference/use_python.html" class="external-link">use_virtualenv</a></span><span class="op">(</span><span class="st">"your_venv"</span><span class="op">)</span>
+
+<span class="co"># set your sql connection string</span>
+<span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span><span class="st">"sampledblib.db.location"</span> <span class="op">=</span> <span class="st">"sqlite:///path_to_sqlite.sqlite"</span><span class="op">)</span>
+
+<span class="co"># set your date format</span>
+<span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span><span class="st">"sampledblib.fm.date_format"</span> <span class="op">=</span> <span class="st">"%d-%b-%Y"</span><span class="op">)</span>
+
+<span class="co"># initialize your sampledb</span>
+<span class="fu"><a href="reference/initialize_sampledb.html">initialize_sampledb</a></span><span class="op">(</span><span class="op">)</span>
+
+<span class="co"># get all studies</span>
+<span class="va">studies</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_studies.html">get_studies</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+</div>
+</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
