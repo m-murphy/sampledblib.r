@@ -1,5 +1,4 @@
 
-
 #' Set Date Format
 #' @description Set the date format string of the file parser
 #'
@@ -8,7 +7,7 @@
 #' @return NULL
 #' @export
 set_date_format <- function(date_format) {
-  file_manager <<- sampleDBLib$file_manager$CLIFileManager(date_format = date_format)
+  assign("file_manager", sampleDBLib$file_manager$CLIFileManager(date_format = date_format), envir = internal)
   message(sprintf("Using date format: %s", date_format))
 }
 
@@ -34,6 +33,7 @@ set_date_format <- function(date_format) {
 #'   This is useful for taking CSVs to update tube locations
 #' @export
 parse_plate_update_files <- function(filepaths, expand_path = FALSE) {
+  file_manager <- get("file_manager", envir = internal)
   if (expand_path) {
     filepaths = sapply(filepaths, path.expand)
   }
@@ -51,6 +51,7 @@ parse_plate_update_files <- function(filepaths, expand_path = FALSE) {
 #' @return returns vector of study subject UIDs
 #' @export
 parse_study_subject_file <- function(filepath, expand_path = FALSE) {
+  file_manager <- get("file_manager", envir = internal)
   if (expand_path) {
     filepath <- path.expand(filepath)
   }
@@ -74,6 +75,8 @@ parse_study_subject_file <- function(filepath, expand_path = FALSE) {
 #' @return returns list of specimen entries with locations from file
 #' @export
 parse_new_plate_file <- function(filepath, expand_path = FALSE) {
+  file_manager <- get("file_manager", envir = internal)
+
   if (expand_path) {
     filepath <- path.expand(filepath)
   }
@@ -95,6 +98,8 @@ parse_new_plate_file <- function(filepath, expand_path = FALSE) {
 #' @return returns list of specimen entries
 #' @export
 parse_specimen_search_file <- function(filepath, expand_path = FALSE) {
+  file_manager <- get("file_manager", envir = internal)
+
   if (expand_path) {
     filepath <- path.expand(filepath)
   }
@@ -116,6 +121,8 @@ parse_specimen_search_file <- function(filepath, expand_path = FALSE) {
 #' @return returns list of subject entries
 #' @export
 parse_subject_search_file <- function(filepath, expand_path = FALSE) {
+  file_manager <- get("file_manager", envir = internal)
+
   if (expand_path) {
     filepath <- path.expand(filepath)
   }
@@ -135,6 +142,8 @@ parse_subject_search_file <- function(filepath, expand_path = FALSE) {
 #' @return a list containing a vector of barcode entries, the original fields of the data, and the index of the barcode column
 #' @export
 parse_barcode_search_file <- function(filepath, expand_path = FALSE) {
+  file_manager <- get("file_manager", envir = internal)
+
   if (expand_path) {
     filepath <- path.expand(filepath)
   }
@@ -156,6 +165,8 @@ parse_barcode_search_file <- function(filepath, expand_path = FALSE) {
 #' @return Vector of barcodes in file
 #' @export
 parse_barcode_file <- function(filepath, expand_path = FALSE) {
+  file_manager <- get("file_manager", envir = internal)
+
   if (expand_path) {
     filepath <- path.expand(filepath)
   }

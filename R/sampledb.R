@@ -50,6 +50,7 @@ initialize_sampledb <- function(conn_string = getOption("sampledblib.db.location
 #' @return returns the study object created
 #' @export
 create_study <- function(title, short_code, is_longitudinal, lead_person, description = NULL) {
+  conn <- get("conn", envir=internal)
   conn$create_study(title, short_code, is_longitudinal, lead_person, description)
 }
 

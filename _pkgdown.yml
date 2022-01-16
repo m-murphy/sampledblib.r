@@ -1,2 +1,28 @@
 url: https://m-murphy.github.io/sampledblib.r/
 
+reference:
+- title: "Setup"
+  desc: >
+    Functions for setting up sampledblib.r
+  contents:
+    - install_sampledblib
+    - initialize_sampledb
+    - set_date_format
+- title: "CRUD"
+  desc: >
+    Functions for reading and manipulating SampleDB
+  contents:
+  - starts_with("create")
+  - find_specimens
+  - starts_with("add")
+  - starts_with("get")
+  - starts_with("delete")
+  - starts_with("update")
+  - set_matrix_tubes_exhausted
+  - unset_matrix_tubes_exhausted
+
+- title: "File Parsing"
+  desc: >
+    Functions to simplify the parsing of files into appropriate datastructures for manipulating the database
+  contents:
+  - starts_with("parse")
