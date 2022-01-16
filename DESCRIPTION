@@ -12,3 +12,5 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
 URL: https://github.com/m-murphy/sampledblib.r
 BugReports: https://github.com/m-murphy/sampledblib.r/issues
+Imports: 
+    reticulate
