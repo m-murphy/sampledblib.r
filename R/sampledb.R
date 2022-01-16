@@ -1,3 +1,39 @@
+internal <- new.env()
+assign("conn", NULL, envir=internal)
+assign("file_manager", NULL, envir=internal)
+
+#' Install SampleDBLib
+#'
+#' @return
+#' @export
+install_sampledblib <- function(force = FALSE) {
+  if(!reticulate::py_module_available("sampledblib") | force) {
+    reticulate::py_install("git+https://github.com/m-murphy/sampledblib@dev")
+  } else {
+    message("sampledblib already installed.")
+  }
+}
+
+#' Initialize SampleDB
+#'
+#' @return
+#' @export
+initialize_sampledb <- function(conn_string = getOption("sampledblib.db.location", ""),
+                                date_format = getOption("sampledblib.fm.dateformat", "%d-%b-%Y")
+                                ) {
+
+  if (conn_string == "") {
+    message("Database location has not been set, defaulting to in memory sqlite.")
+    conn_string = "sqlite:///"
+  } else {
+    message(sprintf("Loading database from %s", conn_string))
+  }
+
+  message(sprintf("Using date format: %s", date_format))
+  assign("conn", sampleDBLib$app$SampleDB(conn_string), envir=internal)
+  assign("file_manager", sampleDBLib$file_manager$CLIFileManager(date_format = date_format), envir=internal)
+}
+
 
 #' Create Study
 #' @description Create a new study entry in the database. Throws a ValueError if
@@ -26,6 +62,7 @@ create_study <- function(title, short_code, is_longitudinal, lead_person, descri
 #'   containers
 #' @export
 get_study <- function(id) {
+  conn <- get("conn", envir=internal)
   res <- conn$get_study(id)
 
   processed_res <- list(
@@ -44,6 +81,7 @@ get_study <- function(id) {
 #' @return returns the list of all studies
 #' @export
 get_studies <- function() {
+  conn <- get("conn", envir=internal)
   conn$get_studies()
 }
 
@@ -55,6 +93,7 @@ get_studies <- function() {
 #' @return returns the study with the short code
 #' @export
 get_study_by_short_code <- function(short_code) {
+  conn <- get("conn", envir=internal)
   conn$get_study_by_short_code(short_code)
 }
 
@@ -71,6 +110,8 @@ get_study_by_short_code <- function(short_code) {
 #' @examples
 #' update_study(1, list(title = "My new title"))
 update_study <- function(study_id, d) {
+  conn <- get("conn", envir=internal)
+
   res <- conn$update_study(study_id, d)
 
   processed_res <- list(
@@ -94,6 +135,8 @@ update_study <- function(study_id, d) {
 #' @return returns TRUE if the study was deleted
 #' @export
 delete_study_by_id <- function(study_id) {
+  conn <- get("conn", envir=internal)
+
   conn$delete_study_by_id(study_id)
 }
 
@@ -107,6 +150,8 @@ delete_study_by_id <- function(study_id) {
 #' @return returns list of study subjects in study
 #' @export
 get_study_subjects <- function(id) {
+  conn <- get("conn", envir=internal)
+
   conn$get_study_subjects(id)
 }
 
@@ -119,6 +164,8 @@ get_study_subjects <- function(id) {
 #' @return returns added study subject
 #' @export
 add_study_subject <- function(uid, study_id) {
+  conn <- get("conn", envir=internal)
+
   conn$add_study_subject(uid, study_id)
 }
 
@@ -132,6 +179,8 @@ add_study_subject <- function(uid, study_id) {
 #' @return returns list of added study subjects
 #' @export
 add_study_subjects <- function(uids, study_id) {
+  conn <- get("conn", envir=internal)
+
   conn$add_study_subjects(uids, study_id)
 }
 
@@ -148,6 +197,8 @@ add_study_subjects <- function(uids, study_id) {
 #'   are specimens associated with the sample.
 #' @export
 delete_study_subject <- function(study_subject_id) {
+  conn <- get("conn", envir=internal)
+
   conn$delete_study_subject(id)
 }
 
@@ -157,6 +208,8 @@ delete_study_subject <- function(study_subject_id) {
 #' @return list of all locations
 #' @export
 get_locations <- function() {
+  conn <- get("conn", envir=internal)
+
   conn$get_locations()
 }
 
@@ -169,6 +222,8 @@ get_locations <- function() {
 #' @export
 #'
 get_location <- function(location_id) {
+  conn <- get("conn", envir=internal)
+
   conn$get_location(location_id)
 }
 
@@ -182,6 +237,8 @@ get_location <- function(location_id) {
 #' @export
 #'
 create_location <- function(description) {
+  conn <- get("conn", envir=internal)
+
   conn$register_new_location(description)
 }
 
@@ -195,6 +252,8 @@ create_location <- function(description) {
 #' @export
 #'
 update_location <- function(location_id, d) {
+  conn <- get("conn", envir=internal)
+
   conn$update_location(location_id, d)
 }
 
@@ -209,6 +268,8 @@ update_location <- function(location_id, d) {
 #'   ValueError if there are storage containers associated with the location.
 #' @export
 delete_location <- function(location_id) {
+  conn <- get("conn", envir=internal)
+
   conn$delete_location(location_id)
 }
 
@@ -220,6 +281,8 @@ delete_location <- function(location_id) {
 #' @return returns the created specimen type
 #' @export
 create_specimen_type <- function(label) {
+  conn <- get("conn", envir=internal)
+
   conn$register_new_specimen_type(label)
 }
 
@@ -228,6 +291,8 @@ create_specimen_type <- function(label) {
 #' @return returns the list of all specimen types
 #' @export
 get_specimen_types <- function() {
+  conn <- get("conn", envir=internal)
+
   conn$get_specimen_types()
 }
 
@@ -238,6 +303,8 @@ get_specimen_types <- function() {
 #' @return returns the specimen type with ID
 #' @export
 get_specimen_type <- function(specimen_type_id) {
+  conn <- get("conn", envir=internal)
+
   conn$get_specimen_type(specimen_type_id)
 }
 
@@ -249,6 +316,8 @@ get_specimen_type <- function(specimen_type_id) {
 #' @return returns the updated specimen type
 #' @export
 update_specimen_type <- function(specimen_type_id, d) {
+  conn <- get("conn", envir=internal)
+
   conn$update_specimen_type(specimen_type_id, d)
 }
 
@@ -260,6 +329,8 @@ update_specimen_type <- function(specimen_type_id, d) {
 #'   if the type has specimens associated.
 #' @export
 delete_specimen_type <- function(specimen_type_id) {
+  conn <- get("conn", envir=internal)
+
   conn$delete_specimen_type(specimen_type_id)
 }
 
@@ -274,6 +345,8 @@ delete_specimen_type <- function(specimen_type_id) {
 #' @return list of Specimens
 #' @export
 get_specimens <- function(uid, short_code, collection_date = NULL) {
+  conn <- get("conn", envir=internal)
+
   conn$get_specimens(uid, short_code, collection_date)
 }
 
@@ -282,6 +355,8 @@ get_specimens <- function(uid, short_code, collection_date = NULL) {
 #' @return list of Matrix Plates
 #' @export
 get_matrix_plates <- function() {
+  conn <- get("conn", envir=internal)
+
   conn$get_matrix_plates()
 }
 
@@ -295,6 +370,8 @@ get_matrix_plates <- function() {
 #' @return returns the matrix plate, its study subjects, specimens, and tubes
 #' @export
 get_matrix_plate <- function(plate_id) {
+  conn <- get("conn", envir=internal)
+
   res <- conn$get_matrix_plate(plate_id)
   processed_res <- list(
     plate = res[[1]],
@@ -335,6 +412,8 @@ get_matrix_plate <- function(plate_id) {
 #'
 #' @export
 add_matrix_plate_with_specimens <- function(plate_uid, location_id, specimen_entries, create_missing_specimens = FALSE, create_missing_subjects = FALSE) {
+  conn <- get("conn", envir=internal)
+
   res <- conn$add_matrix_plate_with_specimens(plate_uid, location_id, specimen_entries, create_missing_specimens, create_missing_subjects)
   processed_res <- list(
     plate = res[[1]],
@@ -363,6 +442,8 @@ add_matrix_plate_with_specimens <- function(plate_uid, location_id, specimen_ent
 #'   subjects, specimens, and tubes
 #' @export
 update_matrix_tube_locations <- function(matrix_tube_entries) {
+  conn <- get("conn", envir=internal)
+
   res <- conn$update_matrix_tube_locations(matrix_tube_entries)
   processed_res <- list(
     plates = res[[1]],
@@ -381,6 +462,8 @@ update_matrix_tube_locations <- function(matrix_tube_entries) {
 #'   if the plate contains tubes
 #' @export
 delete_plate <- function(plate_id) {
+  conn <- get("conn", envir=internal)
+
   conn$delete_plate(plate_id)
 }
 
@@ -404,6 +487,8 @@ delete_plate <- function(plate_id) {
 #'
 #' @export
 find_specimens <- function(specimen_entries, date_format = getOption("sampledblib.dateformat", "%d/%m/%Y")) {
+  conn <- get("conn", envir=internal)
+
   conn$find_specimens(specimen_entries, date_format)
 }
 
@@ -427,6 +512,8 @@ find_specimens <- function(specimen_entries, date_format = getOption("sampledbli
 #'
 #' @export
 get_matrix_tubes_from_specimens <- function(specimen_entries) {
+  conn <- get("conn", envir=internal)
+
   conn$get_matrix_tubes_from_specimens(specimen_entries)
 }
 
@@ -437,6 +524,8 @@ get_matrix_tubes_from_specimens <- function(specimen_entries) {
 #' @return returns the matrix tube with barcode
 #' @export
 get_matrix_tube <- function(barcode) {
+  conn <- get("conn", envir=internal)
+
   conn$get_matrix_tube(barcode)
 }
 
@@ -447,6 +536,8 @@ get_matrix_tube <- function(barcode) {
 #' @return returns list of matrix tubes with provided barcodes
 #' @export
 get_matrix_tubes <- function(barcodes) {
+  conn <- get("conn", envir=internal)
+
   conn$get_matrix_tubes(barcodes)
 }
 
@@ -458,6 +549,8 @@ get_matrix_tubes <- function(barcodes) {
 #' @return returns list of matrix tubes that have been set exhausted
 #' @export
 set_matrix_tubes_exhausted <- function(barcodes) {
+  conn <- get("conn", envir=internal)
+
   conn$set_matrix_tubes_exhausted(barcodes)
 }
 
@@ -470,6 +563,8 @@ set_matrix_tubes_exhausted <- function(barcodes) {
 #' @return returns list of matrix tubes that have been unset exhausted
 #' @export
 unset_matrix_tubes_exhausted <- function(barcodes) {
+  conn <- get("conn", envir=internal)
+
   conn$unset_matrix_tubes_exhausted(barcodes)
 }
 
@@ -483,6 +578,8 @@ unset_matrix_tubes_exhausted <- function(barcodes) {
 #' @return returns the IDs of deleted matrix tubes and specimens
 #' @export
 delete_matrix_tubes_and_specimens <- function(matrix_tubes, specimens) {
+  conn <- get("conn", envir=internal)
+
   conn$delete_matrix_tubes_and_specimens(matrix_tubes, specimens)
 }
 
@@ -495,5 +592,7 @@ delete_matrix_tubes_and_specimens <- function(matrix_tubes, specimens) {
 #' @return
 #' @export
 delete_matrix_tubes <- function(matrix_tubes) {
+  conn <- get("conn", envir=internal)
+
   conn$delete_matrix_tubes(matrix_tubes)
 }
