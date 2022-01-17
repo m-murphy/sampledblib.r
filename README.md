@@ -14,6 +14,8 @@ You can install the development version of sampledblib.r from [GitHub](https://g
 # install.packages("devtools")
 devtools::install_github("m-murphy/sampledblib.r")
 
+# optionally activate your virtual environment
+reticulate::use_virtualenv("your_venv")
 
 # install the python package
 sampledblib.r::install_sampledblib()
@@ -25,7 +27,7 @@ sampledblib.r::install_sampledblib()
 ``` r
 library(sampledblib.r)
 
-# optionally activate your virtualenvironment
+# optionally activate your virtual environment
 reticulate::use_virtualenv("your_venv")
 
 # set your sql connection string
