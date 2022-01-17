@@ -468,12 +468,16 @@ delete_plate <- function(plate_id) {
   conn$delete_plate(plate_id)
 }
 
-#' Find Specimens
+#' Find All Specimens
+#' @description Find all specimens associated with the provided specimen
+#'   entries. Useful for exporting.
 #'
 #' @param specimen_entries list of specimen entries to search for
 #' @param date_format optional date formatting string for output
+#' @param as_data_frame logical indicating whether to return as data.frame.
+#'   Default is TRUE.
 #'
-#' @return list of specimens and their locations
+#' @return list or data.frame of specimens and their locations
 #'
 #' @details Specimen entries are named lists structured as:
 #' ```
@@ -487,10 +491,13 @@ delete_plate <- function(plate_id) {
 #'   specimen entries should be created from a CSV
 #'
 #' @export
-find_specimens <- function(specimen_entries, date_format = getOption("sampledblib.dateformat", "%d/%m/%Y")) {
+find_all_specimens <- function(specimen_entries, date_format = getOption("sampledblib.dateformat", "%d/%m/%Y"), as_data_frame = TRUE) {
   conn <- get("conn", envir=internal)
 
-  conn$find_specimens(specimen_entries, date_format)
+  res <- conn$find_specimens(specimen_entries, date_format)
+  if (as_data_frame) {
+    return(data.table::rbindlist(res))
+  }
 }
 
 

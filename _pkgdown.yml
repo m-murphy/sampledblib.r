@@ -13,7 +13,7 @@ reference:
     Functions for reading and manipulating SampleDB
   contents:
   - starts_with("create")
-  - find_specimens
+  - find_all_specimens
   - starts_with("add")
   - starts_with("get")
   - starts_with("delete")

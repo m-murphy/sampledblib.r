@@ -13,4 +13,5 @@ URL: https://github.com/m-murphy/sampledblib.r,
     https://m-murphy.github.io/sampledblib.r/
 BugReports: https://github.com/m-murphy/sampledblib.r/issues
 Imports: 
+    data.table,
     reticulate
