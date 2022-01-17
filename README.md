@@ -26,6 +26,7 @@ sampledblib.r::install_sampledblib()
 
 ``` r
 library(sampledblib.r)
+library(reticulate)
 
 # optionally activate your virtual environment
 reticulate::use_virtualenv("your_venv")
